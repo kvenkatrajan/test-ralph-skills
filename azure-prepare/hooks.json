@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "./.github/hooks/azure-prepare/session_init.sh",
+        "powershell": "./.github/hooks/azure-prepare/session_init.ps1",
+        "comment": "Initialize preparation manifest and validate workspace state"
+      }
+    ],
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "./.github/hooks/azure-prepare/pre_edit_secrets_scan.sh",
+        "powershell": "./.github/hooks/azure-prepare/pre_edit_secrets_scan.ps1",
+        "comment": "Block edits that would introduce hardcoded secrets"
+      },
+      {
+        "type": "command",
+        "bash": "./.github/hooks/azure-prepare/pre_edit_infra_lint.sh",
+        "powershell": "./.github/hooks/azure-prepare/pre_edit_infra_lint.ps1",
+        "comment": "Validate IaC syntax before allowing infra edits"
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "./.github/hooks/azure-prepare/post_edit_validate.sh",
+        "powershell": "./.github/hooks/azure-prepare/post_edit_validate.ps1",
+        "comment": "Run full validation after edits complete"
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": "./.github/hooks/azure-prepare/session_complete.sh",
+        "powershell": "./.github/hooks/azure-prepare/session_complete.ps1",
+        "comment": "Final validation and manifest status update"
+      }
+    ]
+  }
+}

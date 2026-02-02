@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "./.github/hooks/azure-deploy/session_init.sh",
+        "powershell": "./.github/hooks/azure-deploy/session_init.ps1",
+        "comment": "Initialize deploy manifest and validate prerequisites"
+      }
+    ],
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "./.github/hooks/azure-deploy/pre_deploy_auth_check.sh",
+        "powershell": "./.github/hooks/azure-deploy/pre_deploy_auth_check.ps1",
+        "comment": "Block deployment if not authenticated to Azure"
+      },
+      {
+        "type": "command",
+        "bash": "./.github/hooks/azure-deploy/pre_deploy_manifest_check.sh",
+        "powershell": "./.github/hooks/azure-deploy/pre_deploy_manifest_check.ps1",
+        "comment": "Block deployment if manifest not validated"
+      },
+      {
+        "type": "command",
+        "bash": "./.github/hooks/azure-deploy/pre_deploy_env_check.sh",
+        "powershell": "./.github/hooks/azure-deploy/pre_deploy_env_check.ps1",
+        "comment": "Block deployment if environment not configured"
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "./.github/hooks/azure-deploy/post_deploy_capture.sh",
+        "powershell": "./.github/hooks/azure-deploy/post_deploy_capture.ps1",
+        "comment": "Capture deployment output and detect errors"
+      },
+      {
+        "type": "command",
+        "bash": "./.github/hooks/azure-deploy/post_deploy_verify.sh",
+        "powershell": "./.github/hooks/azure-deploy/post_deploy_verify.ps1",
+        "comment": "Verify deployment succeeded and run health checks"
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": "./.github/hooks/azure-deploy/session_complete.sh",
+        "powershell": "./.github/hooks/azure-deploy/session_complete.ps1",
+        "comment": "Final verification and deploy manifest status update"
+      }
+    ]
+  }
+}
